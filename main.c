@@ -13,7 +13,6 @@
   #include <stdlib.h>
   #include <stdio.h>
   #include <stdint.h>
-  #include "SDL2\SDL.h"
 
   typedef struct sys_Flags { /* note: this is not finished */
         uint8_t carry; //Carry flag
@@ -37,7 +36,6 @@
 
     State65816* Init6502(void)
     {
-        gen_window();
         size_t mem_size = 0x10000;
         State65816* state = calloc(1, sizeof(State65816));
         state->memory = malloc(mem_size); //this should have 64 kilobytes allocated
