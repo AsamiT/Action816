@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 
   Action816 - A custom 65816 emulator
@@ -47,4 +48,3 @@
         State65816* state = Init6502();
         return 0;
     }
-
