@@ -6,40 +6,24 @@
     file: main.c
     desc: "Base for which we invent the universe."
     date: 13 April 2018
-    updated: 17 April 2018
+    updated: 18 April 2018
 **/
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-
-typedef struct State65816 {
-    uint16_t pc; //Program Counter
-    uint8_t sp; //Stack Pointer
-    uint8_t acc; //Accumulator
-    uint8_t irx; //Index Register X
-    uint8_t iry; //Index Register Y
-    uint8_t sysFlags; //system flags:
-    /*  bit 0: carry
-        bit 1: zero
-        bit 2: IRQ disable
-        bit 3: decimal mode
-        bit 4: break instruction
-        bit 5: unimplemented (do not use)
-        bit 6: overflow
-        bit 7: negative */
-    uint16_t *memory; //Memory allocation
-} State65816;
+#include "cpu.h"
+#include "opcodes.h"
 
 /**
  * reset6502 - resets the processor to the power on state for 6502 Emulation mode
  * @param instance instance of the emulated CPU to reset.
  */
 void reset6502(State65816 *instance) {
-    /*instance->pc = 0xFFFC;
+    instance->pc = 0xFFFC;
     instance->sysFlags = 0b00000100; //binary set, disable decimal mode, enable IRQ disable
     instance->sp = 0x00FF; //temporary, will remove later.
-    instance->sysFlags = 0b00001000; //binary set, enable decimal mode*/
+    instance->sysFlags = 0b00001000; //binary set, enable decimal mode
 
     /* this is done based on suggestion from https://goo.gl/kgvkRk;
     demonstrating the process in which a 6502 processor initializes. */
@@ -60,37 +44,11 @@ State65816* Init6502(void) {
 }
 
 /**
- * brk - opcode 0
- * TODO: brief description of what BRK/0 does.
- * noste: this function is written against the prototype for a function pointer, make sure the signatures match!
- * @param state current CPU state.
+ * opcodeCheck
+ * calls the appropriate function for a given opcode.
+ * @param opcode - opcode in the emulated machine's memory
+ * @param state - pointer to an emulated CPU.
  */
-void brk(State65816 *state) {
-    printf("debug:(exe op 0 brk) we're breaking!\n");
-    uint8_t bytes[2]; //create bit differential
-    uint16_t orig_Value; //placeholder for original value
-    orig_Value = state->pc; //import value
-    bytes[0] = *((uint8_t*)&(orig_Value)+1); //high bytes
-    bytes[1] = *((uint8_t*)&(orig_Value)+0); //low bytes
-
-    //state->memory[0xFFFE] = bytes[0]; //store the high bytes in memory location FFFE.
-    //state->memory[0xFFFF] = bytes[1]; //store the low bytes in memory location FFFF.
-
-    /* with the below item, we may need a better method. This is v. sloppy. */
-    //state->memory[0xFF00] = state->sp;
-
-
-
-    //now we retrieve the bytes and put them back together.
-    unsigned int retrieve = bytes[0] * 256 + bytes[1];
-    //push the value back to the program counter.
-    state->pc = retrieve;
-}
-
-void ora(State65816 *state) {
-    printf("debug:(exe op 1 ora) stubbed.\n");
-}
-
 void opcodeCheck(char opcode, State65816 *state) {
     void (*opCodeExec)(State65816 *mystate) = NULL;   // function pointer for which opcode function to call next.
     switch(opcode) {
@@ -110,9 +68,9 @@ void opcodeCheck(char opcode, State65816 *state) {
 int main(int argc, char** argv) {
     State65816* state = Init6502();
     //unsigned long long int cycles = 0;
-    for(state->pc = 0; state->pc < 10; state->pc++) {
+    for(state->pc = 0; state->pc < 10; state->pc++) { /*for(;;) {*/
         printf("pc=%u\n", state->pc);
-        //CRASH AT 36827
+        //crash at 36827 seemingly.
         char cOpCode = state->memory[state->pc];
         printf("op=%i\n", (int) cOpCode);
         opcodeCheck(cOpCode, state);
