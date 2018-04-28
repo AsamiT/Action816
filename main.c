@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "cpu.h"
+#include "opcodes.c"
 #include "opcodes.h"
 
 /**
@@ -37,7 +38,7 @@ void reset6502(State65816 *instance) {
 State65816* Init6502(void) {
     size_t mem_size = 0x10000;
     State65816* state = calloc(1, sizeof(State65816));
-    state->memory = malloc(mem_size); //this should have 64 kilobytes allocated
+    state->memory = calloc(1, mem_size); //this should have 64 kilobytes allocated
     printf("Memory space allocated.\n"); //and it does
     reset6502(state); //invoke a reset
     return state;
@@ -52,16 +53,18 @@ State65816* Init6502(void) {
 void opcodeCheck(char opcode, State65816 *state) {
     void (*opCodeExec)(State65816 *mystate) = NULL;   // function pointer for which opcode function to call next.
     switch(opcode) {
-        /* case 0x0: //BRK b -- 6502 opcode
-            opCodeExec = &brk;
-            break;
-        case 0x1: //ORA (d, X) -- 6502 opcode
-            opCodeExec = &ora;
-            break; */
-        default:
-            break;
+    case 0x0: //BRK b -- 6502 opcode
+          opCodeExec = &brk;
+          break;
+    case 0x1: //ORA (d, X) -- 6502 opcode */
+          opCodeExec = &ora;
+          break;
+    default:
+          break;
     }
-    if(opCodeExec != NULL) (*opCodeExec)(state);
+    if(opCodeExec != NULL) {
+      (*opCodeExec)(state);
+    }
     else printf("illegal/unimplemented opcode: %i\n", opcode);
 }
 
@@ -73,7 +76,7 @@ int main(int argc, char** argv) {
         char cOpCode = state->memory[state->pc];
         printf("op=%i\n\n", (int) cOpCode);
         opcodeCheck(cOpCode, state);
-        //cycles++; // maybe the function pointer should return the amount of cycles executed?
+        cycles++; // maybe the function pointer should return the amount of cycles executed?
     }
     return 0;
 }
