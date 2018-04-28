@@ -71,12 +71,12 @@ void opcodeCheck(char opcode, State65816 *state) {
 int main(int argc, char** argv) {
     State65816* state = Init6502();
     unsigned long long int cycles = 0;
-    for(state->pc = 0; state->pc < 10; state->pc++) { /*for(;;) {*/
+    for(state->pc = 0; state->pc < 10; state->pc++) { //for(;;) {
         printf("pc=%u\n", state->pc);
         char cOpCode = state->memory[state->pc];
         printf("op=%i\n\n", (int) cOpCode);
         opcodeCheck(cOpCode, state);
-        cycles++; // maybe the function pointer should return the amount of cycles executed?
+        //cycles++; // maybe the function pointer should return the amount of cycles executed?
     }
     return 0;
 }
