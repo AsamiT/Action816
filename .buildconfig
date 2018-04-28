@@ -1,0 +1,10 @@
+[default]
+name=Default
+runtime=host
+config-opts=
+run-opts=
+prefix=/home/asami/.cache/gnome-builder/install/Action816/host
+app-id=
+postbuild=
+prebuild=
+default=true

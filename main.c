@@ -38,7 +38,7 @@ State65816* Init6502(void) {
     size_t mem_size = 0x10000;
     State65816* state = calloc(1, sizeof(State65816));
     state->memory = malloc(mem_size); //this should have 64 kilobytes allocated
-    printf("%d bytes allocated.\n", _msize(state->memory)); //and it does
+    printf("Memory space allocated.\n"); //and it does
     reset6502(state); //invoke a reset
     return state;
 }
@@ -55,9 +55,9 @@ void opcodeCheck(char opcode, State65816 *state) {
         case 0x0: //BRK b -- 6502 opcode
             opCodeExec = &brk;
             break;
-        case 0x1: //ORA (d, X) -- 6502 opcode
+        /* case 0x1: //ORA (d, X) -- 6502 opcode
             opCodeExec = &ora;
-            break;
+            break; */
         case 0x2: //cop b -- 65816 exclusive opcode
             break;
     }
@@ -67,10 +67,9 @@ void opcodeCheck(char opcode, State65816 *state) {
 
 int main(int argc, char** argv) {
     State65816* state = Init6502();
-    //unsigned long long int cycles = 0;
+    unsigned long long int cycles = 0;
     for(state->pc = 0; state->pc < 10; state->pc++) { /*for(;;) {*/
         printf("pc=%u\n", state->pc);
-        //crash at 36827 seemingly.
         char cOpCode = state->memory[state->pc];
         printf("op=%i\n", (int) cOpCode);
         opcodeCheck(cOpCode, state);
