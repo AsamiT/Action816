@@ -52,13 +52,13 @@ State65816* Init6502(void) {
 void opcodeCheck(char opcode, State65816 *state) {
     void (*opCodeExec)(State65816 *mystate) = NULL;   // function pointer for which opcode function to call next.
     switch(opcode) {
-        case 0x0: //BRK b -- 6502 opcode
+        /* case 0x0: //BRK b -- 6502 opcode
             opCodeExec = &brk;
             break;
-        /* case 0x1: //ORA (d, X) -- 6502 opcode
+        case 0x1: //ORA (d, X) -- 6502 opcode
             opCodeExec = &ora;
             break; */
-        case 0x2: //cop b -- 65816 exclusive opcode
+        default:
             break;
     }
     if(opCodeExec != NULL) (*opCodeExec)(state);
@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
     for(state->pc = 0; state->pc < 10; state->pc++) { /*for(;;) {*/
         printf("pc=%u\n", state->pc);
         char cOpCode = state->memory[state->pc];
-        printf("op=%i\n", (int) cOpCode);
+        printf("op=%i\n\n", (int) cOpCode);
         opcodeCheck(cOpCode, state);
         //cycles++; // maybe the function pointer should return the amount of cycles executed?
     }
