@@ -71,12 +71,16 @@ void opcodeCheck(char opcode, State65816 *state) {
 int main(int argc, char** argv) {
     State65816* state = Init6502(); //initialize 6502
     unsigned long long int cycles = 0; //declaration of cycle count
-    for(;;) { for(state->pc = 0; state->pc < 100; state->pc++) {
+    state->memory[3] = 1;
+    state->memory[6] = 1;
+    for(;;) { for(state->pc = 254; state->pc < 270; state->pc++) {
       //infinite loop tracking program counter as it iterates to 10
-        printf("pc=%u\n", state->pc);
+        //printf("pc=%u\n", state->pc);
         char cOpCode = state->memory[state->pc];
-        printf("op=%i\n\n", (int) cOpCode);
+        //printf("%hu\n", &state->memory[state->pc]);
+        //printf("op=%i\n\n", (int) cOpCode);
         opcodeCheck(cOpCode, state);
+        sleep(1);
         //cycles++; // maybe the function pointer should return the amount of cycles executed?
       }
     }

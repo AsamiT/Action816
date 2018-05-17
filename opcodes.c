@@ -27,14 +27,19 @@ void brk(State65816 *state) {
 
     bytes[0] = *((uint8_t*)&(orig_Value)+1); //high bytes
     bytes[1] = *((uint8_t*)&(orig_Value)+0); //low bytes
-
     state->memory[0xFFFE] = bytes[0]; //store the high bytes in memory location FFFE.
     state->memory[0xFFFF] = bytes[1]; //store the low bytes in memory location FFFF.
     state->memory[0xFF00] = state->sp; //push contents of memory location FF00 to the stack pointer.
+    printf("original value: %d\n", orig_Value);
+    printf("high bytes FFFE: %x\n", state->memory[0xFFFE]);
+    printf("low bytes FFFF: %x\n", state->memory[0xFFFF]);
+    printf("stack pointer storage at FF00: %d\n", state->memory[0xFF00]);
     //now we retrieve the bytes and put them back together.
     unsigned int retrieve = bytes[0] * 256 + bytes[1];
     //push the value back to the program counter.
     state->pc = retrieve;
+    printf("program counter: %d\n", state->pc);
+    printf("debug:(exe op 0 brk) executed.\n\n");
 }
 
 /**
