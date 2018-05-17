@@ -19,7 +19,6 @@
  * @param state current CPU state.
  */
 void brk(State65816 *state) {
-    printf("debug:(exe op 0 brk) we're breaking!\n");
 
     uint8_t bytes[2]; //create bit differential
     uint16_t orig_Value; //placeholder for original value
@@ -31,9 +30,7 @@ void brk(State65816 *state) {
 
     state->memory[0xFFFE] = bytes[0]; //store the high bytes in memory location FFFE.
     state->memory[0xFFFF] = bytes[1]; //store the low bytes in memory location FFFF.
-
-    // this line is crashing the program.
-    state->memory[0xFF00] = state->sp;
+    state->memory[0xFF00] = state->sp; //push contents of memory location FF00 to the stack pointer.
     //now we retrieve the bytes and put them back together.
     unsigned int retrieve = bytes[0] * 256 + bytes[1];
     //push the value back to the program counter.
