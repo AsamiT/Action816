@@ -48,6 +48,6 @@ void brk(State65816 *state) {
  * @param state current CPU state.
  */
 void ora(State65816 *state) {
-    printf("debug:(exe op 1 ora) stubbed.\n");
+    printf("debug:(exe op 1 ora) stubbed.\n\n");
     /*TODO: implement ORA*/
 }
