@@ -14,7 +14,7 @@
 #include "opcodes.h"
 
 /**
- * brk - opcode 0x0
+ * brk - opcode 0x00
  * @desc: This opcode is supposed to initiate a break from currently executing code.
  * @param: state current CPU state.
  */
@@ -47,7 +47,7 @@ void brk(State65816 *state) {
 }
 
 /**
- * ora - opcode 0x1
+ * ora - opcode 0x01
  * TODO: brief description of what ORA/1 does.
  * @param state current CPU state.
  */
