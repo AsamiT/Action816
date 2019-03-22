@@ -22,9 +22,10 @@
  */
 void reset6502(State65816 *instance) {
     instance->pc = 0xFFFC;
-    instance->sysFlags = 0b00000100; //binary set, disable decimal mode, enable IRQ disable
+    instance->flag_decmod = 0;
+    instance->flag_irqdis = 0;
     instance->sp = 0x00FF; //temporary, will remove later.
-    instance->sysFlags = 0b00001000; //binary set, enable decimal mode
+    instance->flag_decmod = 1;
 
     /* this is done based on suggestion from https://goo.gl/kgvkRk;
     demonstrating the process in which a 6502 processor initializes. */
@@ -39,7 +40,7 @@ State65816* Init6502(void) {
     size_t mem_size = 0x10000;
     State65816* state = calloc(1, sizeof(State65816));
     state->memory = calloc(1, mem_size); //this should have 64 kilobytes allocated
-    printf("Memory space allocated.\n"); //and it does
+    printf("Memory space allocated -- %zu\n", mem_size); //and it does
     reset6502(state); //invoke a reset
     return state;
 }
@@ -72,16 +73,17 @@ int main(int argc, char** argv) {
     State65816* state = Init6502(); //initialize 6502
     unsigned long long int cycles = 0; //declaration of cycle count
     state->sp = 0x1;
-    for(;;) { for(state->pc = 0; state->pc < 0xFFFF; state->pc++) {
+    //for(;;) { 
+      for(state->pc = 0; state->pc < 0xFFFF; state->pc++) {
       //infinite loop tracking program counter as it iterates
-        //printf("pc=%u\n", state->pc);
+        printf("pc=%u\n", state->pc);
         char cOpCode = state->memory[state->pc];
         //printf("%hu\n", &state->memory[state->pc]);
-        //printf("op=%i\n\n", (int) cOpCode);
+        printf("op=%i\n\n", (int) cOpCode);
         opcodeCheck(cOpCode, state);
-        sleep(0.01);
-        //cycles++; // maybe the function pointer should return the amount of cycles executed?
+        //sleep(1);
+        cycles++; // maybe the function pointer should return the amount of cycles executed?
       }
-    }
+    //}
     return 0;
 }
