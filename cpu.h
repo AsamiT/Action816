@@ -6,7 +6,7 @@
     file: cpu.h
     desc: source file for the CPU structure.
     date: 18 April 2018
-    updated: 18 April 2018
+    updated: 22 March 2019
 **/
 
 #ifndef CPU_H_INCLUDED
