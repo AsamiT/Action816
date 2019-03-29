@@ -72,11 +72,12 @@ void opcodeCheck(char opcode, State65816 *state) {
 int main(int argc, char** argv) {
     State65816* state = Init6502(); //initialize 6502
     unsigned long long int cycles = 0; //declaration of cycle count
-    state->sp = 0x1;
+    state->sp = 0x3B;
     //for(;;) { 
-      for(state->pc = 0; state->pc < 0xFFFF; state->pc++) {
+    for(state->pc = 0; state->pc <= 0xF; state->pc++) {
       //infinite loop tracking program counter as it iterates
         printf("pc=%u\n", state->pc);
+        state->memory[state->pc] = state->pc;
         char cOpCode = state->memory[state->pc];
         //printf("%hu\n", &state->memory[state->pc]);
         printf("op=%i\n\n", (int) cOpCode);
